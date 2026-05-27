@@ -3,93 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>N-Queens Web Solver (Fully Advanced)</title>
-    <!-- Tailwind CSS for Modern UI styling -->
+    <title>N-Queens Web Solver (Advanced Dark Mode & Settings)</title>
+    <!-- Tailwind CSS with Dark Mode config -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-4 relative">
+<body class="bg-gray-100 dark:bg-gray-950 min-h-screen flex flex-col items-center justify-center p-4 relative transition-colors duration-200">
 
-    <div class="bg-white shadow-xl rounded-lg max-w-6xl w-full flex flex-col lg:flex-row overflow-hidden border border-gray-200">
+    <div class="bg-white dark:bg-gray-900 shadow-xl rounded-lg max-w-6xl w-full flex flex-col lg:flex-row overflow-hidden border border-gray-200 dark:border-gray-800 transition-colors duration-200">
         
         <!-- Left panel - Controls -->
-        <div class="w-full lg:w-96 bg-gray-50 p-6 border-r border-gray-200 flex flex-col justify-between">
+        <div class="w-full lg:w-96 bg-gray-50 dark:bg-gray-950 p-6 border-r border-gray-200 dark:border-gray-800 flex flex-col justify-between transition-colors duration-200">
             <div>
-                <h2 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">N-Queens Settings</h2>
+                <div class="flex items-center justify-between border-b dark:border-gray-800 pb-2 mb-4">
+                    <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">N-Queens Setup</h2>
+                    <!-- Settings Gear Button -->
+                    <button id="btnOpenSettings" class="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 text-xl p-1 rounded-md focus:outline-none transition duration-150" title="System Settings">
+                        ⚙️
+                    </button>
+                </div>
                 
                 <!-- Inputs -->
                 <div class="space-y-3">
                     <div class="grid grid-cols-2 gap-2">
                         <div>
-                            <label class="block text-xs font-medium text-gray-700">Rows (M)</label>
-                            <input id="inputM" type="number" value="8" min="1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 p-2 border text-sm">
+                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Rows (M)</label>
+                            <input id="inputM" type="number" value="8" min="1" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-950 dark:text-gray-100 p-2 border text-sm focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-gray-700">Cols (N)</label>
-                            <input id="inputN" type="number" value="8" min="1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 p-2 border text-sm">
+                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Cols (N)</label>
+                            <input id="inputN" type="number" value="8" min="1" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-950 dark:text-gray-100 p-2 border text-sm focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-gray-700">Queens (Q)</label>
-                        <input id="inputQ" type="number" value="8" min="1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 p-2 border text-sm">
+                        <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Queens (Q)</label>
+                        <input id="inputQ" type="number" value="8" min="1" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-950 dark:text-gray-100 p-2 border text-sm focus:ring-indigo-500 focus:border-indigo-500">
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-gray-700">Algorithm</label>
-                        <select id="selectAlgo" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 p-2 border bg-white text-sm">
+                        <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Algorithm</label>
+                        <select id="selectAlgo" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-950 dark:text-gray-100 p-2 border text-sm focus:ring-indigo-500 focus:border-indigo-500 bg-white">
                             <option value="HillClimbing">Hill Climbing</option>
                             <option value="AStar">A* Search</option>
                         </select>
                     </div>
 
-                    <!-- Enable Drag and Drop Feature -->
-                    <div class="flex items-center p-2 bg-emerald-50 rounded-md border border-emerald-100">
-                        <input id="checkDrag" type="checkbox" class="h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300 rounded">
-                        <label for="checkDrag" class="ml-2 block text-xs text-emerald-900 font-bold cursor-pointer">
-                            Enable Drag & Drop Queens
-                        </label>
-                    </div>
-
-                    <!-- Solves local minimum feature -->
-                    <div id="restartContainer" class="flex items-center p-2 bg-indigo-50 rounded-md border border-indigo-100">
-                        <input id="checkRestart" type="checkbox" checked class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
-                        <label for="checkRestart" class="ml-2 block text-xs text-indigo-900 font-medium cursor-pointer">
-                            Auto-Restart on Stuck (Solve Local Minimum)
-                        </label>
-                    </div>
-
                     <div>
-                        <label class="block text-xs font-medium text-gray-700">Animation Delay (ms)</label>
-                        <input id="inputDelay" type="range" min="30" max="1000" value="200" class="w-full accent-indigo-600">
-                        <span id="delayVal" class="text-xs text-gray-500">200 ms</span>
+                        <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Animation Delay (ms)</label>
+                        <input id="inputDelay" type="range" min="30" max="1000" value="200" class="w-full accent-indigo-600 dark:accent-indigo-400">
+                        <span id="delayVal" class="text-xs text-gray-500 dark:text-gray-400">200 ms</span>
                     </div>
                 </div>
 
                 <!-- Action Buttons -->
                 <div class="mt-4 space-y-2">
-                    <button id="btnReset" class="w-full bg-gray-600 hover:bg-gray-700 text-white text-sm font-semibold py-2 px-4 rounded transition duration-150">
+                    <button id="btnReset" class="w-full bg-gray-600 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 text-white text-sm font-semibold py-2 px-4 rounded transition duration-150">
                         Reset / Randomize
                     </button>
-                    <button id="btnSolve" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-2 px-4 rounded transition duration-150">
+                    <button id="btnSolve" class="w-full bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white text-sm font-semibold py-2 px-4 rounded transition duration-150">
                         Solve Queens
                     </button>
-                    <button id="btnCount" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold py-2 px-4 rounded transition duration-150">
+                    <button id="btnCount" class="w-full bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white text-sm font-semibold py-2 px-4 rounded transition duration-150">
                         Count All Solutions
                     </button>
                 </div>
 
                 <!-- File Operations -->
-                <div class="mt-4 pt-4 border-t border-gray-200">
-                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">File Operations</label>
+                <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-800">
+                    <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">File Operations</label>
                     <div class="grid grid-cols-2 gap-2">
-                        <button id="btnExport" class="bg-slate-700 hover:bg-slate-800 text-white text-xs font-semibold py-2 px-2 rounded transition duration-150">
+                        <button id="btnExport" class="bg-slate-700 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white text-xs font-semibold py-2 px-2 rounded transition duration-150">
                             Export TXT
                         </button>
                         <!-- Styled Custom Import Button -->
-                        <label class="bg-slate-700 hover:bg-slate-800 text-white text-xs font-semibold py-2 px-2 rounded transition duration-150 cursor-pointer text-center block">
+                        <label class="bg-slate-700 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white text-xs font-semibold py-2 px-2 rounded transition duration-150 cursor-pointer text-center block">
                             Import TXT
                             <input id="inputImport" type="file" accept=".txt" class="hidden">
                         </label>
@@ -98,28 +93,73 @@
             </div>
 
             <!-- Status outputs -->
-            <div class="mt-6 pt-4 border-t border-gray-200 space-y-2 text-sm">
-                <div class="font-bold text-base" id="statusText">Status: Ready</div>
-                <div id="conflictsText" class="text-gray-600 font-medium">Current Conflicts: 0</div>
-                <div id="stepsText" class="text-gray-600">Steps / Nodes: 0</div>
-                <div id="restartText" class="text-gray-600 hidden">Restarts (Random Jump): 0</div>
-                <div id="solutionsText" class="text-emerald-700 font-bold bg-emerald-50 p-2 rounded border border-emerald-200 hidden">
+            <div class="mt-6 pt-4 border-t border-gray-200 dark:border-gray-800 space-y-2 text-sm">
+                <div class="font-bold text-base text-gray-800 dark:text-gray-200" id="statusText">Status: Ready</div>
+                <div id="conflictsText" class="text-gray-600 dark:text-gray-400 font-medium">Current Conflicts: 0</div>
+                <div id="stepsText" class="text-gray-600 dark:text-gray-400">Steps / Nodes: 0</div>
+                <div id="restartText" class="text-gray-600 dark:text-gray-400 hidden">Restarts (Random Jump): 0</div>
+                <div id="solutionsText" class="text-emerald-700 dark:text-emerald-300 font-bold bg-emerald-50 dark:bg-emerald-950/40 p-2 rounded border border-emerald-200 dark:border-emerald-900/40 hidden">
                     Total possible solutions: --
                 </div>
             </div>
         </div>
 
         <!-- Right panel - Board Canvas -->
-        <div class="flex-1 p-6 flex items-center justify-center bg-gray-100">
-            <canvas id="boardCanvas" width="550" height="550" class="bg-white shadow-md rounded border border-gray-300 max-w-full h-auto"></canvas>
+        <div class="flex-1 p-6 flex items-center justify-center bg-gray-100 dark:bg-gray-950 transition-colors duration-200">
+            <canvas id="boardCanvas" width="550" height="550" class="bg-white dark:bg-gray-950 shadow-md rounded border border-gray-300 dark:border-gray-800 max-w-full h-auto"></canvas>
         </div>
 
     </div>
 
-    <!-- Small Troll Button (Bottom Right) -->
-    <button id="btnTroll" class="fixed bottom-2 right-2 bg-gray-300/40 hover:bg-gray-400/80 text-gray-600 text-[10px] py-1 px-2 rounded transition duration-150 shadow-sm z-30">
+    <!-- Floating Troll Button (Bottom Right) -->
+    <button id="btnTroll" class="fixed bottom-2 right-2 bg-gray-300/40 hover:bg-gray-400/80 dark:bg-gray-800/40 dark:hover:bg-gray-700/80 text-gray-600 dark:text-gray-400 text-[10px] py-1 px-2 rounded transition duration-150 shadow-sm z-30">
         click her for result
     </button>
+
+    <!-- Settings Dialog Modal (Hidden by Default) -->
+    <div id="settingsModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-2xl max-w-sm w-full p-6 border border-gray-100 dark:border-gray-700 transition-colors duration-200">
+            <div class="flex items-center justify-between border-b dark:border-gray-700 pb-3 mb-4">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100">System Settings</h3>
+                <button id="btnCloseSettings" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-lg font-bold focus:outline-none">✕</button>
+            </div>
+            
+            <div class="space-y-4">
+                <!-- Dark Mode Toggle -->
+                <div class="flex items-center justify-between">
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Dark Theme (Chế độ tối)</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input id="checkDark" type="checkbox" class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-600"></div>
+                    </label>
+                </div>
+
+                <!-- Enable Drag and Drop Feature -->
+                <div class="flex items-center justify-between">
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Manual Drag & Drop</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input id="checkDrag" type="checkbox" class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-emerald-600"></div>
+                    </label>
+                </div>
+
+                <!-- Auto Restart Feature -->
+                <div id="restartToggleContainer" class="flex items-center justify-between">
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Auto-Restart on Stuck</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input id="checkRestart" type="checkbox" checked class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-600"></div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="mt-6 pt-3 border-t dark:border-gray-700 flex justify-end">
+                <button id="btnApplySettings" class="bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white text-xs font-semibold py-2 px-4 rounded transition duration-150">
+                    Apply & Close
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Fullscreen Video Overlay for the Troll -->
     <div id="trollOverlay" class="fixed inset-0 bg-black z-50 hidden flex flex-col items-center justify-center">
@@ -127,18 +167,12 @@
             ✕ Close
         </button>
         <video id="trollVideo" class="max-w-full max-h-full" controls>
-            <!-- 1. Thử đường dẫn tuyệt đối tại Documents (Vừa cập nhật theo thư mục mới) -->
             <source src="file:///home/phuc-hy/Documents/DesireDrive.mp4" type="video/mp4">
             <source src="/home/phuc-hy/Documents/DesireDrive.mp4" type="video/mp4">
-
-            <!-- 2. Thử đường dẫn tương đối (Hoạt động tốt nhất khi file HTML và MP4 chung thư mục) -->
             <source src="DesireDrive.mp4" type="video/mp4">
-
-            <!-- 3. Thử đường dẫn tuyệt đối tại Downloads cũ -->
             <source src="file:///home/phuc-hy/Downloads/DesireDrive.mp4" type="video/mp4">
             <source src="/home/phuc-hy/Downloads/DesireDrive.mp4" type="video/mp4">
-
-            Your browser does not support local video playback. Please place "DesireDrive.mp4" in the same directory as this HTML file.
+            Your browser does not support local video playback. Please place "DesireDrive.mp4" next to this index.html file.
         </video>
     </div>
 
@@ -167,6 +201,7 @@
         const selectAlgo = document.getElementById('selectAlgo');
         const checkDrag = document.getElementById('checkDrag');
         const checkRestart = document.getElementById('checkRestart');
+        const checkDark = document.getElementById('checkDark');
         const inputDelay = document.getElementById('inputDelay');
         const delayVal = document.getElementById('delayVal');
         const btnReset = document.getElementById('btnReset');
@@ -180,15 +215,52 @@
         const restartText = document.getElementById('restartText');
         const solutionsText = document.getElementById('solutionsText');
 
+        // Settings Modal References
+        const settingsModal = document.getElementById('settingsModal');
+        const btnOpenSettings = document.getElementById('btnOpenSettings');
+        const btnCloseSettings = document.getElementById('btnCloseSettings');
+        const btnApplySettings = document.getElementById('btnApplySettings');
+
         // Troll References
         const btnTroll = document.getElementById('btnTroll');
         const trollOverlay = document.getElementById('trollOverlay');
         const btnCloseTroll = document.getElementById('btnCloseTroll');
         const trollVideo = document.getElementById('trollVideo');
 
-        // Dynamic hide/show Auto-restart based on algorithm selection
+        // Dark Mode initialization from LocalStorage
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.documentElement.classList.add('dark');
+            checkDark.checked = true;
+        } else {
+            document.documentElement.classList.remove('dark');
+            checkDark.checked = false;
+        }
+
+        // Settings Modal Events
+        btnOpenSettings.addEventListener('click', () => {
+            settingsModal.classList.remove('hidden');
+        });
+        
+        const closeSettings = () => {
+            settingsModal.classList.add('hidden');
+        };
+        btnCloseSettings.addEventListener('click', closeSettings);
+        btnApplySettings.addEventListener('click', closeSettings);
+
+        // Dark Mode Toggle Event
+        checkDark.addEventListener('change', () => {
+            if (checkDark.checked) {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        });
+
+        // Hide Auto-restart option when A* algorithm is selected (Since A* doesn't use it)
         selectAlgo.addEventListener('change', () => {
-            const container = document.getElementById('restartContainer');
+            const container = document.getElementById('restartToggleContainer');
             if (selectAlgo.value === "HillClimbing") {
                 container.classList.remove('hidden');
             } else {
@@ -200,14 +272,14 @@
             delayVal.textContent = `${inputDelay.value} ms`;
         });
 
-        // Trigger board update when Drag & Drop is toggled
+        // Handle Drag status change inside settings modal
         checkDrag.addEventListener('change', () => {
             if (checkDrag.checked) {
                 if (isAnimating) {
                     clearTimeout(animationTimeout);
                     isAnimating = false;
                     statusText.textContent = "Status: Manual Mode";
-                    statusText.className = "font-bold text-base text-emerald-600";
+                    statusText.className = "font-bold text-base text-emerald-600 dark:text-emerald-400";
                 }
             }
         });
@@ -218,21 +290,19 @@
         btnExport.addEventListener('click', exportToTXT);
         inputImport.addEventListener('change', importFromTXT);
 
-        // Canvas mouse event listeners for Drag & Drop
+        // Drag & Drop Canvas events
         canvas.addEventListener('mousedown', dragStart);
         canvas.addEventListener('mousemove', dragMove);
         canvas.addEventListener('mouseup', dragEnd);
         canvas.addEventListener('mouseleave', dragEnd);
 
-        // Mobile touch event listeners
         canvas.addEventListener('touchstart', dragStart, { passive: false });
         canvas.addEventListener('touchmove', dragMove, { passive: false });
         canvas.addEventListener('touchend', dragEnd);
 
-        // Troll Event Listeners
+        // Troll Button Event Handlers
         btnTroll.addEventListener('click', () => {
             trollOverlay.classList.remove('hidden');
-            // Try to make it full screen for better troll effect
             if (trollOverlay.requestFullscreen) {
                 trollOverlay.requestFullscreen().catch(() => {});
             }
@@ -275,7 +345,7 @@
             currentState = getRandomState();
             animStates = [];
             statusText.textContent = "Status: Ready";
-            statusText.className = "font-bold text-base text-gray-800";
+            statusText.className = "font-bold text-base text-gray-800 dark:text-gray-200";
             stepsText.textContent = "Steps / Nodes: 0";
             
             updateConflictsLabel();
@@ -373,7 +443,7 @@
             });
         }
 
-        // --- Drag & Drop Event Handlers ---
+        // --- Drag & Drop Coordinate Handlers ---
         function getEventPos(e) {
             const rect = canvas.getBoundingClientRect();
             let clientX = e.clientX;
@@ -435,7 +505,7 @@
                 if (!tileIsOccupied) {
                     currentState[draggedIdx] = [targetR, targetC];
                     statusText.textContent = "Status: Manual Mode";
-                    statusText.className = "font-bold text-base text-emerald-600";
+                    statusText.className = "font-bold text-base text-emerald-600 dark:text-emerald-400";
                 }
             }
 
@@ -585,12 +655,12 @@
 
             if (calculateConflicts(startState) === 0) {
                 statusText.textContent = "Status: Already Solved!";
-                statusText.className = "font-bold text-base text-green-600";
+                statusText.className = "font-bold text-base text-green-600 dark:text-green-400";
                 return;
             }
 
             statusText.textContent = "Status: Calculating...";
-            statusText.className = "font-bold text-base text-yellow-600";
+            statusText.className = "font-bold text-base text-yellow-600 dark:text-yellow-400";
             restartText.classList.add('hidden');
 
             setTimeout(() => {
@@ -635,7 +705,7 @@
                     animate(result.success);
                 } else {
                     statusText.textContent = "Status: No Solution Found";
-                    statusText.className = "font-bold text-base text-red-600";
+                    statusText.className = "font-bold text-base text-red-600 dark:text-red-400";
                 }
             }, 50);
         }
@@ -653,10 +723,10 @@
                 isAnimating = false;
                 if (success) {
                     statusText.textContent = "Status: Success (Solved!)";
-                    statusText.className = "font-bold text-base text-green-600";
+                    statusText.className = "font-bold text-base text-green-600 dark:text-green-400";
                 } else {
                     statusText.textContent = "Status: Stuck in Local Minimum";
-                    statusText.className = "font-bold text-base text-red-600";
+                    statusText.className = "font-bold text-base text-red-600 dark:text-red-400";
                 }
             }
         }
@@ -790,7 +860,7 @@
                     restartText.classList.add('hidden');
                     
                     statusText.textContent = "Status: Imported Successfully";
-                    statusText.className = "font-bold text-base text-indigo-600";
+                    statusText.className = "font-bold text-base text-indigo-600 dark:text-indigo-400";
                     stepsText.textContent = "Steps / Nodes: 0";
 
                     updateConflictsLabel();
